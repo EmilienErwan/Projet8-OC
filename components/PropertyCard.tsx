@@ -16,6 +16,7 @@ export default function PropertyCard({ property }: { property: Property }) {
           fill
           className="property-image"
           sizes="(max-width: 768px) 100vw, 33vw"
+          loading="eager"
         />
         <FavoriteButton id={property.id} />
       </div>

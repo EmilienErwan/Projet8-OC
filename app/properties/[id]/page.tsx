@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import HostCard from "@/components/HostCard";
 import TagList from "@/components/TagList";
 import { getProperty } from "@/services/api";
-import PropertyGallery from "@/components/PropertyGallery";
+import Carousel from "@/components/Carousel";
 
 export default async function PropertyDetailPage({
   params,
@@ -25,13 +25,25 @@ export default async function PropertyDetailPage({
     : property.cover
       ? [property.cover]
       : [];
-
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    name: property.title,
+    description: property.description,
+    address: property.location,
+    image: images,
+    priceRange: `${property.price_per_night ?? property.price ?? 100}€ par nuit`,
+    };
   return (
     <section className="property-detail-page">
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       <Link href="/" className="back-link">← Retour aux annonces</Link>
 
       <div className="property-top-layout">
-        <PropertyGallery images={images} title={property.title} />
+        <Carousel images={images} title={property.title} />
         <HostCard host={property.host} />
       </div>
 
