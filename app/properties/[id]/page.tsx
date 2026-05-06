@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Carousel from "@/components/Carousel";
 import HostCard from "@/components/HostCard";
 import TagList from "@/components/TagList";
 import { getProperty } from "@/services/api";
+import PropertyGallery from "@/components/PropertyGallery";
 
 export default async function PropertyDetailPage({
   params,
@@ -30,21 +30,19 @@ export default async function PropertyDetailPage({
     <section className="property-detail-page">
       <Link href="/" className="back-link">← Retour aux annonces</Link>
 
-      <Carousel images={images} title={property.title} />
-
-      <div className="property-detail-layout">
-        <article className="property-detail-card">
-          <h1>{property.title}</h1>
-          <p className="location">{property.location}</p>
-
-          <p className="description">{property.description}</p>
-
-          <TagList title="Équipements" items={property.equipments} />
-          <TagList title="Catégorie" items={property.tags} />
-        </article>
-
+      <div className="property-top-layout">
+        <PropertyGallery images={images} title={property.title} />
         <HostCard host={property.host} />
       </div>
+
+      <article className="property-detail-card">
+        <h1>{property.title}</h1>
+        <p className="location">⌖ {property.location}</p>
+        <p className="description">{property.description}</p>
+
+        <TagList title="Équipements" items={property.equipments} />
+        <TagList title="Catégorie" items={property.tags} />
+      </article>
     </section>
   );
 }

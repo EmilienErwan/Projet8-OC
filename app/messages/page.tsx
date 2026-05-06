@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import { useState } from "react";
+import { useEffect, useRef } from "react";
 
 const conversations = Array.from({ length: 8 }, (_, index) => ({
   id: index + 1,
@@ -11,6 +12,7 @@ const conversations = Array.from({ length: 8 }, (_, index) => ({
   preview: "Bonjour, votre appartement est-il disp...",
   unread: index < 3,
 }));
+
 
 const messages = [
   { id: 1, fromMe: false, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
@@ -23,6 +25,7 @@ const messages = [
 ];
 
 export default function MessagesPage() {
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
   const [newMessage, setNewMessage] = useState("");
 
@@ -36,6 +39,9 @@ export default function MessagesPage() {
     alert("Message envoyé !");
     setNewMessage("");
   }
+  useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [selectedConversation]);
 
   return (
     <section className={`messages-page ${showDetail ? "show-detail" : ""}`}>
@@ -96,6 +102,7 @@ export default function MessagesPage() {
               </div>
             )
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         <form className="message-form" onSubmit={sendMessage}>
