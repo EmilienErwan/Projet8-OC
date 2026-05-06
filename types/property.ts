@@ -16,4 +16,5 @@ export type Property = {
   host?: Host;
   price?: number;
   price_per_night?: number;
+  rating?: string | number;
 };
