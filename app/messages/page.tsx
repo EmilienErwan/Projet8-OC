@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { ArrowUp } from "lucide-react";
-import { useState } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
+/**
+ * Données simulées pour afficher une liste de conversations.
+ * Le backend du projet ne fournit pas d’API de messagerie,
+ * donc cette partie est mockée côté front.
+ */
 const conversations = Array.from({ length: 8 }, (_, index) => ({
   id: index + 1,
   user: "Utilisateur",
@@ -13,24 +17,66 @@ const conversations = Array.from({ length: 8 }, (_, index) => ({
   unread: index < 3,
 }));
 
-
+/**
+ * Messages simulés d’une conversation.
+ */
 const messages = [
-  { id: 1, fromMe: false, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
-  { id: 2, fromMe: false, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
-  { id: 3, fromMe: true, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
+  {
+    id: 1,
+    fromMe: false,
+    text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?",
+  },
+  {
+    id: 2,
+    fromMe: false,
+    text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?",
+  },
+  {
+    id: 3,
+    fromMe: true,
+    text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?",
+  },
   { id: 4, type: "date", text: "03 Septembre 2025" },
-  { id: 5, fromMe: false, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
-  { id: 6, fromMe: true, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
-  { id: 7, fromMe: false, text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?" },
+  {
+    id: 5,
+    fromMe: false,
+    text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?",
+  },
+  {
+    id: 6,
+    fromMe: true,
+    text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?",
+  },
+  {
+    id: 7,
+    fromMe: false,
+    text: "Bonjour, votre appartement est-il disponible pour le week-end du 12 au 14 octobre ?",
+  },
 ];
 
+/**
+ * Page de messagerie.
+ *
+ * Affiche une liste de conversations et une conversation sélectionnée.
+ * En mobile, la page passe d’une vue liste à une vue détail.
+ */
 export default function MessagesPage() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
+
+  const [selectedConversation, setSelectedConversation] = useState<number | null>(
+    null
+  );
   const [newMessage, setNewMessage] = useState("");
 
+  /**
+   * Permet de savoir si une conversation est ouverte.
+   * Sert notamment au responsive mobile.
+   */
   const showDetail = selectedConversation !== null;
 
+  /**
+   * Simule l’envoi d’un message.
+   */
   function sendMessage(event: React.FormEvent) {
     event.preventDefault();
 
@@ -39,9 +85,14 @@ export default function MessagesPage() {
     alert("Message envoyé !");
     setNewMessage("");
   }
+
+  /**
+   * Scroll automatiquement en bas de la conversation
+   * lorsqu’une conversation est sélectionnée.
+   */
   useEffect(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [selectedConversation]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [selectedConversation]);
 
   return (
     <section className={`messages-page ${showDetail ? "show-detail" : ""}`}>
@@ -76,7 +127,10 @@ export default function MessagesPage() {
       </aside>
 
       <article className="chat-panel">
-        <button className="mobile-back-chat" onClick={() => setSelectedConversation(null)}>
+        <button
+          className="mobile-back-chat"
+          onClick={() => setSelectedConversation(null)}
+        >
           ← Retour
         </button>
 
@@ -89,7 +143,9 @@ export default function MessagesPage() {
             ) : (
               <div
                 key={message.id}
-                className={`message-row ${message.fromMe ? "from-me" : "from-other"}`}
+                className={`message-row ${
+                  message.fromMe ? "from-me" : "from-other"
+                }`}
               >
                 {!message.fromMe && <span className="message-avatar" />}
 
@@ -102,6 +158,7 @@ export default function MessagesPage() {
               </div>
             )
           )}
+
           <div ref={messagesEndRef} />
         </div>
 

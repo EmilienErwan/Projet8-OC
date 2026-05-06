@@ -4,6 +4,9 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
+/**
+ * Liste prédéfinie des équipements disponibles.
+ */
 const EQUIPMENTS = [
   "Micro-Ondes",
   "Clic-clac",
@@ -31,6 +34,9 @@ const EQUIPMENTS = [
   "Vue Parc",
 ];
 
+/**
+ * Liste prédéfinie des catégories proposées à l’utilisateur.
+ */
 const DEFAULT_TAGS = [
   "Parc",
   "Night Life",
@@ -43,6 +49,13 @@ const DEFAULT_TAGS = [
   "Forêt",
 ];
 
+/**
+ * Page d’ajout de propriété.
+ *
+ * Permet à un utilisateur connecté de créer un logement
+ * avec ses informations principales, ses images,
+ * ses équipements, ses catégories et les informations de l’hôte.
+ */
 export default function AddPropertyPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -63,12 +76,19 @@ export default function AddPropertyPage() {
   const [error, setError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
+  /**
+   * Protection de la page.
+   * Si aucun token n’est présent, l’utilisateur est redirigé vers la connexion.
+   */
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       window.location.href = "/login";
     }
   }, []);
 
+  /**
+   * Ajoute ou retire un équipement de la sélection.
+   */
   function toggleEquipment(equipment: string) {
     setSelectedEquipments((current) =>
       current.includes(equipment)
@@ -77,6 +97,9 @@ export default function AddPropertyPage() {
     );
   }
 
+  /**
+   * Ajoute ou retire une catégorie de la sélection.
+   */
   function toggleTag(tag: string) {
     setSelectedTags((current) =>
       current.includes(tag)
@@ -85,6 +108,9 @@ export default function AddPropertyPage() {
     );
   }
 
+  /**
+   * Ajoute une catégorie personnalisée à la liste sélectionnée.
+   */
   function addCustomTag() {
     const cleanTag = customTag.trim();
     if (!cleanTag) return;
@@ -96,6 +122,12 @@ export default function AddPropertyPage() {
     setCustomTag("");
   }
 
+  /**
+   * Upload une image vers le backend.
+   *
+   * @param file Fichier image sélectionné.
+   * @param type Type d’image : couverture, image logement ou image hôte.
+   */
   async function uploadImage(file: File, type: "cover" | "picture" | "host") {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -104,7 +136,11 @@ export default function AddPropertyPage() {
     formData.append("file", file);
     formData.append(
       "purpose",
-      type === "host" ? "user-picture" : type === "cover" ? "property-cover" : "property-picture"
+      type === "host"
+        ? "user-picture"
+        : type === "cover"
+          ? "property-cover"
+          : "property-picture"
     );
 
     setIsUploading(true);
@@ -133,6 +169,9 @@ export default function AddPropertyPage() {
     }
   }
 
+  /**
+   * Soumet le formulaire et crée une propriété via l’API.
+   */
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
@@ -187,7 +226,9 @@ export default function AddPropertyPage() {
 
   return (
     <section className="add-property-page">
-      <Link href="/" className="back-link">← Retour aux annonces</Link>
+      <Link href="/" className="back-link">
+        ← Retour aux annonces
+      </Link>
 
       <form onSubmit={handleSubmit}>
         <div className="add-property-header">
@@ -223,17 +264,28 @@ export default function AddPropertyPage() {
 
             <label>
               Code postal
-              <input value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
+              <input
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+              />
             </label>
 
             <label>
               Localisation
-              <input value={location} onChange={(e) => setLocation(e.target.value)} required />
+              <input
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                required
+              />
             </label>
 
             <label>
               Prix par nuit
-              <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
             </label>
           </div>
 
@@ -244,24 +296,33 @@ export default function AddPropertyPage() {
                 onChange={(file) => uploadImage(file, "cover")}
               />
 
-              {cover && <p className="uploaded-text">Image de couverture ajoutée</p>}
+              {cover && (
+                <p className="uploaded-text">Image de couverture ajoutée</p>
+              )}
 
               <UploadField
                 label="Image du logement"
                 onChange={(file) => uploadImage(file, "picture")}
               />
 
-              <button type="button" className="text-add">+Ajouter une image</button>
+              <button type="button" className="text-add">
+                +Ajouter une image
+              </button>
 
               {pictures.length > 0 && (
-                <p className="uploaded-text">{pictures.length} image(s) ajoutée(s)</p>
+                <p className="uploaded-text">
+                  {pictures.length} image(s) ajoutée(s)
+                </p>
               )}
             </div>
 
             <div className="form-card">
               <label>
                 Nom de l’hôte
-                <input value={hostName} onChange={(e) => setHostName(e.target.value)} />
+                <input
+                  value={hostName}
+                  onChange={(e) => setHostName(e.target.value)}
+                />
               </label>
 
               <UploadField
@@ -269,9 +330,13 @@ export default function AddPropertyPage() {
                 onChange={(file) => uploadImage(file, "host")}
               />
 
-              <button type="button" className="text-add">+Ajouter une image</button>
+              <button type="button" className="text-add">
+                +Ajouter une image
+              </button>
 
-              {hostPicture && <p className="uploaded-text">Photo de profil ajoutée</p>}
+              {hostPicture && (
+                <p className="uploaded-text">Photo de profil ajoutée</p>
+              )}
             </div>
           </div>
 
@@ -300,7 +365,11 @@ export default function AddPropertyPage() {
                 <button
                   key={tag}
                   type="button"
-                  className={selectedTags.includes(tag) ? "tag-choice active" : "tag-choice"}
+                  className={
+                    selectedTags.includes(tag)
+                      ? "tag-choice active"
+                      : "tag-choice"
+                  }
                   onClick={() => toggleTag(tag)}
                 >
                   {tag}
@@ -332,6 +401,12 @@ export default function AddPropertyPage() {
   );
 }
 
+/**
+ * Champ réutilisable pour sélectionner et uploader une image.
+ *
+ * @param label Texte affiché au-dessus du champ.
+ * @param onChange Fonction appelée lorsqu’un fichier est sélectionné.
+ */
 function UploadField({
   label,
   onChange,

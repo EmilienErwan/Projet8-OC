@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+/**
+ * Page d’inscription utilisateur.
+ *
+ * Permet de créer un compte, d’accepter les conditions,
+ * puis de connecter automatiquement l’utilisateur en stockant le token JWT.
+ */
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -10,6 +16,12 @@ export default function RegisterPage() {
   const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState("");
 
+  /**
+   * Gère la soumission du formulaire d’inscription.
+   *
+   * Vérifie d’abord que les conditions sont acceptées,
+   * puis envoie les données à l’API.
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -29,7 +41,7 @@ export default function RegisterPage() {
           name: `${firstname} ${name}`,
           email,
           password,
-          role: "owner", // 🔥 important pour ton projet
+          role: "owner",
         }),
       });
 
@@ -40,9 +52,7 @@ export default function RegisterPage() {
         return;
       }
 
-      // auto login
       localStorage.setItem("token", data.token);
-
       window.location.href = "/";
     } catch {
       setError("Erreur réseau");
@@ -55,9 +65,9 @@ export default function RegisterPage() {
         <h1>Rejoignez la communauté Kasa</h1>
 
         <p>
-          Créez votre compte et commencez à voyager autrement :
-          réservez des logements uniques, découvrez de nouvelles destinations
-          et partagez vos propres lieux avec d’autres voyageurs.
+          Créez votre compte et commencez à voyager autrement : réservez des
+          logements uniques, découvrez de nouvelles destinations et partagez vos
+          propres lieux avec d’autres voyageurs.
         </p>
 
         {error && <p className="form-error">{error}</p>}
@@ -65,22 +75,40 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit}>
           <label>
             Nom
-            <input value={name} onChange={(e) => setName(e.target.value)} required />
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
           </label>
 
           <label>
             Prénom
-            <input value={firstname} onChange={(e) => setFirstname(e.target.value)} required />
+            <input
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+              required
+            />
           </label>
 
           <label>
             Adresse email
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </label>
 
           <label>
             Mot de passe
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </label>
 
           <label className="checkbox">

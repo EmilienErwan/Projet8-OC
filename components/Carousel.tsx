@@ -5,6 +5,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { getImageUrl } from "@/services/api";
 
+/**
+ * Carousel d’images pour une propriété
+ *
+ * Permet :
+ * - d’afficher une image à la fois
+ * - de naviguer entre les images avec des boutons
+ * - de gérer le cas d’une seule image
+ */
 export default function Carousel({
   images,
   title,
@@ -12,16 +20,37 @@ export default function Carousel({
   images: string[];
   title: string;
 }) {
+  /**
+   * Sécurisation des images :
+   * - si aucune image → on affiche un placeholder
+   */
   const safeImages = images.length > 0 ? images : ["/placeholder.jpg"];
+
+  /**
+   * Index de l’image actuellement affichée
+   */
   const [index, setIndex] = useState(0);
+
+  /**
+   * Indique s’il y a plusieurs images
+   * (permet d’afficher ou non les boutons)
+   */
   const hasMany = safeImages.length > 1;
 
+  /**
+   * Passe à l’image précédente
+   * - si on est à la première → on va à la dernière
+   */
   const previous = () => {
     setIndex((current) =>
       current === 0 ? safeImages.length - 1 : current - 1
     );
   };
 
+  /**
+   * Passe à l’image suivante
+   * - si on est à la dernière → on revient à la première
+   */
   const next = () => {
     setIndex((current) =>
       current === safeImages.length - 1 ? 0 : current + 1

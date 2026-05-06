@@ -2,11 +2,23 @@ import Image from "next/image";
 import PropertyCard from "@/components/PropertyCard";
 import { getProperties } from "@/services/api";
 
+/**
+ * Page d’accueil de l’application
+ *
+ * - Récupère les propriétés depuis l’API
+ * - Affiche une section hero
+ * - Affiche la liste des logements
+ */
 export default async function HomePage() {
+  /**
+   * Appel API côté serveur (Server Component)
+   * → améliore les performances et le SEO
+   */
   const properties = await getProperties();
 
   return (
     <section className="home-page">
+      {/* Texte principal */}
       <div className="hero-text">
         <h1>Chez vous, partout et ailleurs</h1>
         <p>
@@ -15,6 +27,7 @@ export default async function HomePage() {
         </p>
       </div>
 
+      {/* Image hero */}
       <div className="hero-image">
         <Image
           src="/hero-home.png"
@@ -26,12 +39,14 @@ export default async function HomePage() {
         />
       </div>
 
+      {/* Liste des logements */}
       <div className="properties-grid">
         {properties.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
 
+      {/* Section marketing */}
       <section className="how-it-works">
         <h2>Comment ça marche ?</h2>
         <p>
