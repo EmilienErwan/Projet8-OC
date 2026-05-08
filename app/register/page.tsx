@@ -9,10 +9,16 @@ import { useState } from "react";
  * puis de connecter automatiquement l’utilisateur en stockant le token JWT.
  */
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [name, setName] = useState("");
+  // const [firstname, setFirstname] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    firstname: "",
+    email: "",
+    password: "",
+  });
   const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState("");
 
@@ -38,9 +44,9 @@ export default function RegisterPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: `${firstname} ${name}`,
-          email,
-          password,
+          name: `${userInfo.firstname} ${userInfo.name}`,
+          email: userInfo.email,
+          password: userInfo.password,
           role: "owner",
         }),
       });
@@ -76,8 +82,8 @@ export default function RegisterPage() {
           <label>
             Nom
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={userInfo.name}
+              onChange={(e) => setUserInfo((prev) => ({ ...prev, name: e.target.value }))}
               required
             />
           </label>
@@ -85,8 +91,8 @@ export default function RegisterPage() {
           <label>
             Prénom
             <input
-              value={firstname}
-              onChange={(e) => setFirstname(e.target.value)}
+              value={userInfo.firstname}
+              onChange={(e) => setUserInfo((prev) => ({ ...prev, firstname: e.target.value }))}
               required
             />
           </label>
@@ -95,8 +101,8 @@ export default function RegisterPage() {
             Adresse email
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={userInfo.email}
+              onChange={(e) => setUserInfo((prev) => ({ ...prev, email: e.target.value }))}
               required
             />
           </label>
@@ -105,8 +111,8 @@ export default function RegisterPage() {
             Mot de passe
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userInfo.password}
+              onChange={(e) => setUserInfo((prev) => ({ ...prev, password: e.target.value }))}
               required
             />
           </label>

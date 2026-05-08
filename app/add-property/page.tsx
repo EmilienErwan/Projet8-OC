@@ -57,11 +57,18 @@ const DEFAULT_TAGS = [
  * ses équipements, ses catégories et les informations de l’hôte.
  */
 export default function AddPropertyPage() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [location, setLocation] = useState("");
-  const [price, setPrice] = useState("");
+  // const [title, setTitle] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [zipCode, setZipCode] = useState("");
+  // const [location, setLocation] = useState("");
+  // const [price, setPrice] = useState("");
+  const [propertyInfo, setPropertyInfo] = useState({
+    title: "",
+    description: "",
+    zipCode: "",
+    location: "",
+    price: "",
+  });
 
   const [cover, setCover] = useState("");
   const [pictures, setPictures] = useState<string[]>([]);
@@ -191,10 +198,10 @@ export default function AddPropertyPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          title,
-          description,
-          location: `${location}${zipCode ? ` - ${zipCode}` : ""}`,
-          price_per_night: Number(price) || 100,
+          title : propertyInfo.title,
+          description: propertyInfo.description,
+          location: `${propertyInfo.location}${propertyInfo.zipCode ? ` - ${propertyInfo.zipCode}` : ""}`,
+          price_per_night: Number(propertyInfo.price) || 100,
           cover:
             cover ||
             "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
@@ -244,8 +251,8 @@ export default function AddPropertyPage() {
             <label>
               Titre de la propriété
               <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={propertyInfo.title}
+                onChange={(e) => setPropertyInfo((prev) => ({ ...prev, title: e.target.value }))}
                 placeholder="Ex : Appartement cosy au coeur de paris"
                 required
               />
@@ -254,8 +261,8 @@ export default function AddPropertyPage() {
             <label>
               Description
               <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={propertyInfo.description}
+                onChange={(e) => setPropertyInfo((prev) => ({ ...prev, description: e.target.value }))}
                 placeholder="Décrivez votre propriété en détail..."
                 rows={6}
                 required
@@ -265,16 +272,16 @@ export default function AddPropertyPage() {
             <label>
               Code postal
               <input
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
+                value={propertyInfo.zipCode}
+                onChange={(e) => setPropertyInfo((prev) => ({ ...prev, zipCode: e.target.value }))}
               />
             </label>
 
             <label>
               Localisation
               <input
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                value={propertyInfo.location}
+                onChange={(e) => setPropertyInfo((prev) => ({ ...prev, location: e.target.value }))}
                 required
               />
             </label>
@@ -283,8 +290,8 @@ export default function AddPropertyPage() {
               Prix par nuit
               <input
                 type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                value={propertyInfo.price}
+                onChange={(e) => setPropertyInfo((prev) => ({ ...prev, price: e.target.value }))}
               />
             </label>
           </div>

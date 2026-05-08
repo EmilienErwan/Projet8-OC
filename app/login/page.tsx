@@ -12,8 +12,12 @@ import { useState } from "react";
  * - de stocker le token JWT
  */
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
 
   /**
@@ -33,8 +37,8 @@ export default function LoginPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email,
-          password,
+          email: userInfo.email,
+          password: userInfo.password,
         }),
       });
 
@@ -80,8 +84,8 @@ export default function LoginPage() {
             Adresse email
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={userInfo.email}
+              onChange={(e) => setUserInfo((prev) => ({ ...prev, email: e.target.value }))}
               required
             />
           </label>
@@ -90,8 +94,8 @@ export default function LoginPage() {
             Mot de passe
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userInfo.password}
+              onChange={(e) => setUserInfo((prev) => ({ ...prev, password: e.target.value }))}
               required
             />
           </label>
